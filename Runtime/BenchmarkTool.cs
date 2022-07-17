@@ -22,6 +22,11 @@ namespace Benchmark
             ("Quad.fbx", "Quad")
         };
 
+        private static readonly Color ErrorColor = new Color(0.8f, 0.2f, 0.2f, 0.8f);
+        private static readonly Color WarningColor = new Color(0.8f, 0.6f, 0.2f, 0.8f);
+        private static readonly Color FpsBoxColor = new Color(0f, 0f, 0f, 0.5f);
+        private static readonly Vector2 FpsPosition = new Vector2(60f, 0f);
+
         public Mesh[] customMeshes;
         public Material[] materials;
 
@@ -46,14 +51,10 @@ namespace Benchmark
         private LogType lastLogType = LogType.Log;
         private string lastLogMessage;
 
-        private Color errorColor = new Color(0.8f, 0.2f, 0.2f, 0.8f);
-        private Color warningColor = new Color(0.8f, 0.6f, 0.2f, 0.8f);
-        private Color fpsBoxColor = new Color(0f, 0f, 0f, 0.5f);
-
         private GUIStyle fpsTextStyle;
         private GUIStyle logTextStyle;
-        private GUIContent fpsLabel = new GUIContent();
-        private Vector2 fpsPosition = new Vector2(60f, 0f);
+        private readonly GUIContent fpsLabel = new GUIContent();
+
         private int fps;
         private int avgfps;
         private float avgTime;
@@ -146,9 +147,9 @@ namespace Benchmark
 
         private void DrawFPS()
         {
-            GUI.color = fpsBoxColor;
+            GUI.color = FpsBoxColor;
             fpsLabel.text = $" fps: {fps} avg fps: {avgfps}";
-            var rect = new Rect(fpsPosition, fpsTextStyle.CalcSize(fpsLabel));
+            var rect = new Rect(FpsPosition, fpsTextStyle.CalcSize(fpsLabel));
             GUI.DrawTexture(rect, Texture2D.whiteTexture);
             GUI.color = Color.white;
             GUI.Label(rect, fpsLabel, fpsTextStyle);
@@ -163,8 +164,8 @@ namespace Benchmark
             var logRect = new Rect(0, scaledScreenHeight * (1 - logHeight), scaledScreenWidth, scaledScreenHeight * logHeight);
             GUI.color = lastLogType switch
             {
-                LogType.Warning => warningColor,
-                _ => errorColor
+                LogType.Warning => WarningColor,
+                _ => ErrorColor
             };
             GUI.DrawTexture(logRect, Texture2D.whiteTexture);
             GUI.color = Color.white;
